@@ -50,27 +50,71 @@ What's the time complexity?
 
  */
 
+ // from the slides exercise
+
+var SlideStack = function() {
+  this.storage = "";
+  this.size = 0;
+}
+
+SlideStack.prototype.push = function(val) {
+  this.storage = this.storage.concat("***", val);
+  this.size++;
+}
+
+SlideStack.prototype.pop = function() {
+  // slice off characters up until ***
+  var lastDelim = this.storage.lastIndexOf('***');
+  var str = this.storage.slice(lastDelim + 3);
+  // update new stack without the last item
+  this.storage = this.storage.substring(0, lastDelim);
+  // return last item
+  return str;
+}
+
+SlideStack.prototype.size = function() {
+  console.log(this.size);
+}
+
+var myWeeklyMenu = new SlideStack();
+
+myWeeklyMenu.push("RedBeans");
+
+
+// the main exercise
+
 function Stack(capacity) {
   // implement me...
+  this.capacity = capacity;
+  this.storage = {};
+  this.size = 0;
 }
 
 Stack.prototype.push = function(value) {
   // implement me...
+  if (this.size < capacity) {
+    this.storage[this.size] = value;
+    this.size++;
+  }
 };
 // Time complexity:
 
 Stack.prototype.pop = function() {
   // implement me...
+  this.storage[this.size] = null;
+  this.size--;
 };
 // Time complexity:
 
 Stack.prototype.peek = function() {
   // implement me...
+  console.log(this.storage[this.size]);
 };
 // Time complexity:
 
 Stack.prototype.count = function() {
   // implement me...
+  console.log(this.size);
 };
 // Time complexity:
 
