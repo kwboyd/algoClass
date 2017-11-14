@@ -50,31 +50,77 @@ What's the time complexity?
 
  */
 
-function Queue(capacity) {
+ // my initial attempt
+
+function FirstQueue(capacity) {
   // implement me...
   this.capacity = capacity;
+  this.size = 0;
   this.storage = {};
 }
 
-Queue.prototype.enqueue = function(value) {
+FirstQueue.prototype.enqueue = function(value) {
   // implement me...
+  if (this.size < this.capacity) {
+    this.storage[this.size] = value;
+    this.size++;
+  }
 };
 // Time complexity:
+
+FirstQueue.prototype.dequeue = function() {
+  // implement me...
+  for (let i = 0; i < this.size - 1; i++) {
+    this.storage[this.size] = this.storage[this.size + 1]
+  }
+  this.storage[this.size] = null;
+  this.size--;  
+};
+// Time complexity:
+
+FirstQueue.prototype.peek = function() {
+  // implement me...
+  console.log(this.storage[this.size]);
+};
+
+FirstQueue.prototype.count = function() {
+  // implement me...
+  console.log(this.size);
+};
+// Time complexity:
+
+
+// with the solution
+
+function Queue(capacity) {
+  this._capacity = capacity || Infinity;
+  this._storage = {};
+  this._head = 0;
+  this._tail = 0;
+}
+
+Queue.prototype.enqueue = function(value) {
+  if (this.count() < this._capacity) {
+    this._storage[this._tail++] = value;
+    return this.count();
+  }
+  return 'Whoops max reached.'
+}
 
 Queue.prototype.dequeue = function() {
-  // implement me...
-};
-// Time complexity:
+  var element = this._storage[this._head];
+  delete this._storage[this._head];
+  if (this._head < this._tail) this._head++;
+  return element;
+}
 
 Queue.prototype.peek = function() {
-  // implement me...
-};
+  return this._storage[this._head];
+}
 
 Queue.prototype.count = function() {
-  // implement me...
-};
-// Time complexity:
-
+  return this._tail - this._head;
+}
 
 
 /*
@@ -88,3 +134,151 @@ Queue.prototype.count = function() {
 
 
  */
+
+ // exercise 1 attempt: queue with two stacks
+
+ function Stack(capacity) {
+  this._capacity = capacity || Infinity;
+  this._storage = {};
+  this._count = 0;
+}
+
+Stack.prototype.push = function(value) {
+  if (this._count < this._capacity) {
+    this._storage[this._count++] = value;
+    return this._count;
+  }
+  return 'Whoops capacity already reached.'
+}
+
+Stack.prototype.pop = function() {
+  var value = this._storage[--this._count];
+  delete this._storage[this._count];
+  if (this._count < 0) {
+    this._count = 0;
+  }
+  return value;
+}
+
+Stack.prototype.peek = function() {
+  return this._storage[this._count-1];
+}
+
+// thinking through this
+// stack is LIFO
+// queue is FIFO
+// stack for in and stack for out
+
+// push 1 onto out stack
+// in: 
+// out: 1
+
+// to push 2:
+// transfer 1 from out to in
+// in: 1
+// in 2 onto out
+// out: 2
+// transfer 1 from in to out
+// in: 
+// out: 2, 1
+
+// to push 3:
+// transfer 1 from out to in
+// transfer 2 from out to in
+// push 3 onto out
+// transfer 2 from in to out
+// transfer 1 from in to out
+// in: 
+// out: 3, 2, 1
+
+// to pop:
+// pop 1 from out stack
+
+function StackQueue(capacity) {
+  this.capacity = capacity || Infinity;
+  this._inStack = new Stack();
+  this._outStack = new Stack();
+}
+
+StackQueue.prototype.push = function (value) {
+  if (this._outStack.count() === 0) {
+    this._outStack.push(value);
+  } else {
+    while (this._outStack.count() > 0) {
+      this.transferToIn();
+    }
+    this._outStack.push(value);
+    while(this._inStack.count() > 0) {
+      this.transferToOut();
+    }
+  }
+}
+
+StackQueue.prototype.transferToIn = function() {
+  let transfer = this._outStack.peek();
+  this._inStack.push(transfer);
+  this._outStack.pop();
+}
+
+StackQueue.prototype.transferToOut = function() {
+  let transfer = this._inStack.peek();
+  this._outStack.push(transfer);
+  this._inStack.pop();
+}
+
+StackQueue.prototype.pop = function() {
+  this._outStack.pop();
+}
+
+StackQueue.prototype.count = function() {
+  return this._outStack.count();
+}
+
+StackQueue.prototype.peek = function() {
+  return this._outStack.peek();
+}
+
+// end exercise 1
+
+// exercise 2 attempt: Implement a double-ended queue, with the following methods: enqueueLeft, dequeueLeft, enqueueRight, dequeueRight.
+
+// thinking through
+// can use a loop to scoot every value over when enqueueLeft but the time complexity is bad
+// can the head be a negative number? why not?
+
+function DoubleQueue(capacity) {
+  this._capacity = capacity || Infinity;
+  this._head = 0;
+  this._tail = 0;
+  this._storage = {};
+}
+
+DoubleQueue.prototype.enqueueLeft = function(value) {
+  if (this.count() >= this._capacity) {
+    return 'Capacity reached';
+  } else {
+    this._storage[--this._head] = value;
+  }
+}
+
+DoubleQueue.prototype.dequeueLeft = function() {
+  delete this._storage[this._head];
+  if (this._head < this._tail) this._head++;
+}
+
+DoubleQueue.prototype.enqueueRight = function(value) {
+  if (this.count() >= this._capacity) {
+    return 'Capacity reached';
+  } else {
+    this._storage[++this._tail] = value;
+  }
+}
+
+DoubleQueue.prototype.dequeueRight = function() {
+  delete this._storage[this._tail];
+  if (this._head < this._tail) this._tail--;
+}
+
+DoubleQueue.prototype.count = function() {
+  return this._head - this._tail;
+}

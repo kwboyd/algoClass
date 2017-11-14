@@ -83,14 +83,16 @@ myWeeklyMenu.push("RedBeans");
 
 // the main exercise
 
-function Stack(capacity) {
+// my initial attempt
+
+function FirstStack(capacity) {
   // implement me...
   this.capacity = capacity;
   this.storage = {};
   this.size = 0;
 }
 
-Stack.prototype.push = function(value) {
+FirstStack.prototype.push = function(value) {
   // implement me...
   if (this.size < capacity) {
     this.storage[this.size] = value;
@@ -99,25 +101,54 @@ Stack.prototype.push = function(value) {
 };
 // Time complexity:
 
-Stack.prototype.pop = function() {
+FirstStack.prototype.pop = function() {
   // implement me...
   this.storage[this.size] = null;
   this.size--;
 };
 // Time complexity:
 
-Stack.prototype.peek = function() {
+FirstStack.prototype.peek = function() {
   // implement me...
   console.log(this.storage[this.size]);
 };
 // Time complexity:
 
-Stack.prototype.count = function() {
+FirstStack.prototype.count = function() {
   // implement me...
   console.log(this.size);
 };
 // Time complexity:
 
+
+// with the solution
+
+function Stack(capacity) {
+  this._capacity = capacity || Infinity;
+  this._storage = {};
+  this._count = 0;
+}
+
+Stack.prototype.push = function(value) {
+  if (this._count < this._capacity) {
+    this._storage[this._count++] = value;
+    return this._count;
+  }
+  return 'Whoops capacity already reached.'
+}
+
+Stack.prototype.pop = function() {
+  var value = this._storage[--this._count];
+  delete this._storage[this._count];
+  if (this._count < 0) {
+    this._count = 0;
+  }
+  return value;
+}
+
+Stack.prototype.peek = function() {
+  return this._storage[this._count-1];
+}
 
 /*
 *** Exercises:
@@ -137,3 +168,43 @@ You are given three towers (stacks) and N disks, each of different size. You can
    3. no disk can be placed on top of a disk that is smaller than it
 The disks begin on tower#1. Write a function that will move the disks from tower#1 to tower#3 in such a way that none of the constraints are violated.
  */
+
+ // exercise 1
+
+ function MinStack(capacity) {
+  this._capacity = capacity || Infinity;
+  this._storage = {};
+  this._count = 0;
+  this._min = new Stack();
+}
+
+MinStack.prototype.push = function(value) {
+  if (this._count < this._capacity) {
+    if (this._min.peek() < value) {
+      this._min.push(this._min.peek());
+    } else {
+      this._min.push(value);
+    }
+    this._storage[this._count++] = value;
+    return this._count;
+  }
+  return 'Whoops capacity already reached.'
+}
+
+MinStack.prototype.pop = function() {
+  this._min.pop();
+  var value = this._storage[--this._count];
+  delete this._storage[this._count];
+  if (this._count < 0) {
+    this._count = 0;
+  }
+  return value;
+}
+
+MinStack.prototype.peek = function() {
+  return this._storage[this._count-1];
+}
+
+MinStack.prototype.min = function() {
+  return this._min.peek();
+} 
