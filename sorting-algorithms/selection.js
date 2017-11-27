@@ -28,3 +28,37 @@ Stable Variant
 - Implement selection sort for a linked list (you can use your data structure implemention from earlier in the course). How does this impact performance and stability?
 
 */
+
+// finds the min value and puts it in the right place
+
+var selectionSort = function (array, comparator) {
+  comparator = comparator || defaultComparator;
+  array.forEach(function(element, index) {
+    // for each position, find index of minimum value in subarray starting at that position
+    var minValue = element;
+    var minIndex = index;
+    for (var i = index; i < array.length; i++) {
+      if (comparator(array[i], minValue) < 0) {
+        // if array at index is less than minValue
+        minValue = array[i];
+        minIndex = i;
+      }
+    }
+    array = swap(array, index, minIndex);
+  });
+  return array;
+}
+
+
+function swap (arr, i1, i2) {
+  var temp = arr[i1];
+  arr[i1] = arr[i2];
+  arr[i2] = temp;
+  return arr;
+}
+
+function defaultComparator(a,b) {
+  if (a < b) return -1; // a comes first
+  else if (a > b) return 1; // b comes first
+  return 0;
+};
