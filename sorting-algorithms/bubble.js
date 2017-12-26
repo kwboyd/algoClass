@@ -49,3 +49,25 @@ var swap = function(array, i1, i2) {
   arr[i1] = arr[i1]^arr[i2];
   return arr;
 }
+
+
+// bubble swap again
+
+var bubbleSort = function(arr) {
+  let wall = arr.length;
+  while (wall >= 0) {
+    for (let i = 0; i < wall; i++) {
+      if (arr[i] > arr[i+1]) {
+        arr = swap(arr, i, i + 1);
+      }
+    }
+    wall--;
+  }
+}
+
+var swap = function(arr, i1, i2) {
+  let temp = arr[i1];
+  arr[i1] = arr[i2];
+  arr[i2] = temp;
+  return arr;
+}

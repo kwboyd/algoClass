@@ -150,6 +150,35 @@ Stack.prototype.peek = function() {
   return this._storage[this._count-1];
 }
 
+
+
+
+function Stack(capacity) {
+  this._capacity = capacity;
+  this._storage = {};
+  this._count = 0;
+}
+
+Stack.prototype.push = function(value) {
+  if (this._count < this._capacity) {
+    this._storage[this._count++] = value;
+    return this._count;
+  }
+}
+
+Stack.prototype.pop = function() {
+  var value = this._storage[--this._count];
+  delete this._storage[this._count];
+  if (this._count < 0) {
+    this._count = 0;
+  }
+  return value;
+}
+
+Stack.prototype.peek = function() {
+  return this._storage[this._count - 1];
+}
+
 /*
 *** Exercises:
 

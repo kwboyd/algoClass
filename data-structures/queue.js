@@ -123,6 +123,37 @@ Queue.prototype.count = function() {
 }
 
 
+
+function Queue(capacity) {
+  this._capacity = capacity;
+  this._storage = {};
+  this._head = 0;
+  this._tail = 0;
+}
+
+Queue.prototype.enqueue = function(value) {
+  if (this.count() < this._capacity) {
+    this._storage[this._tail++] = value;
+    return this.count();
+  }
+}
+
+Queue.prototype.dequeue = function() {
+  var element = this._storage[this._head];
+  delete this._storage[this._head];
+  if (this._head < this._tail) this._head++;
+  return element;
+}
+
+Queue.prototype.peek = function() {
+  return this._storage[this._head];
+}
+
+Queue.prototype.count = function() {
+  return this._tail - this._head;
+}
+
+
 /*
 *** Exercises:
 

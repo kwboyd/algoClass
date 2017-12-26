@@ -62,3 +62,21 @@ function defaultComparator(a,b) {
   else if (a > b) return 1; // b comes first
   return 0;
 };
+
+var selectionSort = function(array) {
+  var length = array.length;
+  var minIndex;
+  for (let i = 0; i < length; i++) {
+    minIndex = i;
+    for (let j = i + 1; i < length; i++) {
+      // j is i+1 because only need to go through unsorted
+      if (array[j] < arr[minIndex]) {
+        minIndex = j;
+      }
+    }
+    // after each go through, swap if min has changed
+    if (minIndex !== i) {
+      array = swap(array, minIndex, i);
+    }
+  }
+}

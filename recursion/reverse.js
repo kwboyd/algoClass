@@ -27,3 +27,8 @@ function reverse(str) {
   // if str length is 0, return empty string
   // otherwise, return last letter in string + run reverse with full string minus one
 }
+
+function reverse(str) {
+  if (str.length === 0) return '';
+  return str[str.length - 1] + reverse(str.substr(0, str.length - 1));
+}
