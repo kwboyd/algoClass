@@ -21,3 +21,45 @@ Variants:
 - Implement a multi-pivot quicksort (ex: partition into 3 subarrays using 2 pivots)
 
 */
+
+function quicksort(array, lo, hi) {
+  if (lo === undefined) lo = 0;
+  if (hi === undefined) hi = array.length - 1;
+
+  if (lo < hi) {
+    // partition array
+    var p = partition(array, lo, hi);
+    // sort subarrays
+    quicksort(array, lo, p-1);
+    quicksort(array, p+1, hi);
+  }
+
+  // for initial call, return sorted array
+  if (hi-lo === array.length - 1) return array;
+}
+
+function partition(arr, lo, hi) {
+  // choose last element as pivot
+  var pivot = arr[hi];
+  // keep track of index to put pivot at
+  var pivotLoc = lo;
+  // go through subarray
+  for (var i = lo; i < hi; i++) {
+    // if element <= pivot, place element before pivot
+    if (arr[i] <= pivot) {
+      swap(arr, pivotLoc, i);
+      pivotLoc++;
+    }
+  }
+  // move pivot to proper location
+  swap(arr, pivotLoc, hi);
+  return pivotLoc;
+}
+
+function swap (arr, i1, i2) {
+  if (i1 === i2) return;
+  var temp = arr[i1];
+  arr[i1] = arr[i2];
+  arr[i2] = temp;
+  return arr;
+}
